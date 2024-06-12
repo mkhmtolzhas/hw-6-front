@@ -6,9 +6,33 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { io } from "socket.io-client";
 
+let socket = null;
 
 export default function Home() {
-  
+  useEffect(() => {
+    socket = io("http://localhost:3000");
+
+    socket.on("connect", () => {
+      console.log("connected");
+    });
+
+    socket.on("hello", (arg) => {
+      console.log(arg); // world
+      toast(arg);
+    });
+
+    socket.on("disconnect", () => {
+      console.log("disconnected");
+    });
+  }, []);
+
+  const joinRoom1 = () => {
+    socket!.emit("join-room", "room-1");
+  };
+
+  const joinRoom2 = () => {
+    socket!.emit("join-room", "room-2");
+  };
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
@@ -39,11 +63,13 @@ export default function Home() {
 
       <div className="flex space-x-4">
         <button
+          onClick={joinRoom1}
           className="px-6 py-3 text-white bg-blue-600 rounded-lg"
         >
           Join Room 1
         </button>
         <button
+          onClick={joinRoom2}
           className="px-6 py-3 text-white bg-blue-600 rounded-lg"
         >
           Join Room 2
