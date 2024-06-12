@@ -6,11 +6,10 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { io } from "socket.io-client";
 
-let socket = null;
 
 export default function Home() {
   useEffect(() => {
-    socket = io("http://localhost:3000");
+    const socket = io("http://localhost:3000");
 
     socket.on("connect", () => {
       console.log("connected");
@@ -27,11 +26,13 @@ export default function Home() {
   }, []);
 
   const joinRoom1 = () => {
-    socket!.emit("join-room", "room-1");
+    const socket = io("http://localhost:3000");
+    socket.emit("join-room", "room-1");
   };
 
   const joinRoom2 = () => {
-    socket!.emit("join-room", "room-2");
+    const socket = io("http://localhost:3000");
+    socket.emit("join-room", "room-2");
   };
 
   return (
